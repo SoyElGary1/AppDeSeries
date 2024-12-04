@@ -174,9 +174,11 @@ public class Principal {
         System.out.println("Ingrese la evaluacion de la serie");
         var evaluacion = teclado.nextDouble();
 
-        Optional<Serie> serie = serieRepository.findByTotalTemporadasAndEvaluacionGreaterThanEqual(numeroTemporadas, evaluacion);
-        if (serie.isPresent()) {
-            System.out.println("Serie encontrada es: " + serie.get());
+        List<Serie> serie = serieRepository.seriesPorTemporadaYEvaluacion(numeroTemporadas, evaluacion);
+        if (!serie.isEmpty()) {
+            for (Serie serieEncontrada : serie) {
+                System.out.println("Serie encontrada es: " + serieEncontrada);
+            }
         }
     }
 
