@@ -1,9 +1,6 @@
 package com.aluracursos.screenmatch.principal;
 
-import com.aluracursos.screenmatch.model.DatosSerie;
-import com.aluracursos.screenmatch.model.DatosTemporadas;
-import com.aluracursos.screenmatch.model.Episodio;
-import com.aluracursos.screenmatch.model.Serie;
+import com.aluracursos.screenmatch.model.*;
 import com.aluracursos.screenmatch.repository.ISerieRepository;
 import com.aluracursos.screenmatch.service.ConsumoAPI;
 import com.aluracursos.screenmatch.service.ConvierteDatos;
@@ -42,6 +39,8 @@ public class Principal {
                     3 - Mostrar series buscadas
                     4-  Buscar series por titulo
                     5-  Buscar top 5 series con mejores evaluaciones
+                    6-  Buscar series por categoria
+                    7-  Buscar serie por una cantidad de temporadas y por su evaluación
                     
                     0 - Salir
                     """;
@@ -65,6 +64,12 @@ public class Principal {
                 case 5:
                     BuscarTop5Series();
                     break;
+                case 6:
+                    BuscarSeriePorCategoria();
+                    break;
+                case 7:
+                    BuscarSeriePorNumeroTemporadasYEvaluacion();
+                    break;
 
                 case 0:
                     System.out.println("Cerrando la aplicación...");
@@ -75,6 +80,7 @@ public class Principal {
         }
 
     }
+
 
 
 
@@ -153,6 +159,26 @@ public class Principal {
         top5Series.forEach(s-> System.out.printf("%s - %s\n", s.getTitulo(), s.getEvaluacion()));
     }
 
+    private void BuscarSeriePorCategoria() {
+        System.out.println("Escribe el genero de las series que deseas buscar");
+        var nombreGenero = teclado.nextLine();
+        var categoria = CategoriaEnum.fromEspanol(nombreGenero);
+        List<Serie> seriesPorCategoria = serieRepository.findByGenero(categoria);
+        System.out.println("Las series del genero: " + nombreGenero);
+        seriesPorCategoria.forEach(s-> System.out.printf("%s - %s\n", s.getTitulo(), s.getGenero()));
+    }
+
+    private void BuscarSeriePorNumeroTemporadasYEvaluacion() {
+        System.out.println("Ingrese la cantidad de temporadas de la serie");
+        var numeroTemporadas = teclado.nextInt();
+        System.out.println("Ingrese la evaluacion de la serie");
+        var evaluacion = teclado.nextDouble();
+
+        Optional<Serie> serie = serieRepository.findByTotalTemporadasAndEvaluacionGreaterThanEqual(numeroTemporadas, evaluacion);
+        if (serie.isPresent()) {
+            System.out.println("Serie encontrada es: " + serie.get());
+        }
+    }
 
 
 

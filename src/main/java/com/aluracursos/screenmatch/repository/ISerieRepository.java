@@ -1,5 +1,6 @@
 package com.aluracursos.screenmatch.repository;
 
+import com.aluracursos.screenmatch.model.CategoriaEnum;
 import com.aluracursos.screenmatch.model.Serie;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -10,4 +11,8 @@ public interface ISerieRepository extends JpaRepository<Serie, Long> {
 
     Optional<Serie> findByTituloContainsIgnoreCase(String nombreSerie);
     List<Serie> findTop5ByOrderByEvaluacionDesc();
+    List<Serie> findByGenero(CategoriaEnum genero);
+    Optional<Serie> findByTotalTemporadasAndEvaluacionGreaterThanEqual(Integer totalTemporadas, Double evaluacion);
+
 }
+//una serie por un cierto numero de temporadas y por una evaluacion en especifico
