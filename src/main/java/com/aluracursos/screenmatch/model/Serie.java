@@ -33,7 +33,7 @@ public class Serie {
 
     private String sinopsis;
 
-    @Transient
+    @OneToMany(mappedBy = "serie", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Episodio> episodios;
 
 
@@ -50,6 +50,7 @@ public class Serie {
         // descomentar para integrar chatGPT
         //this.sinopsis = ConsultaChatGPT.obtenerTraduccion(datosSerie.sinopsis());
         this.sinopsis = datosSerie.sinopsis();
+
     }
 
     public void setId(Long id) {
@@ -116,17 +117,24 @@ public class Serie {
         this.sinopsis = sinopsis;
     }
 
+    public List<Episodio> getEpisodios() {
+        return episodios;
+    }
+
+    public void setEpisodios(List<Episodio> episodios) {
+        episodios.forEach(e -> e.setSerie(this));
+        this.episodios = episodios;
+    }
+
     @Override
     public String toString() {
-        return "genero=" + genero + '\'' +
-                "titulo='" + titulo + '\'' +
+        return  ", titulo='" + titulo + '\'' +
                 ", totalTemporadas=" + totalTemporadas +
                 ", evaluacion=" + evaluacion +
                 ", poster='" + poster + '\'' +
-
+                ", genero=" + genero +
                 ", actores='" + actores + '\'' +
-                ", sinopsis='" + sinopsis + '\'';
+                ", sinopsis='" + sinopsis + '\'' +
+                ", episodios='" + episodios + '\'';
     }
-
-
 }
